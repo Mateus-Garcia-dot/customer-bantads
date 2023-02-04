@@ -1,6 +1,7 @@
 package com.bantads.customer.exception;
 
 import lombok.Data;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,9 +12,12 @@ import java.util.NoSuchElementException;
 @ControllerAdvice
 public class ApplicationExceptionHandler extends ResponseStatusExceptionHandler {
 
-    @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity handleException(NoSuchElementException e) {
-        return ResponseEntity.status(404).body("Account not found");
+    @ExceptionHandler({
+            NoSuchElementException.class,
+            EmptyResultDataAccessException.class
+    })
+    public ResponseEntity<String> handleException(Exception e) {
+        return ResponseEntity.status(404).body("Customer not found");
     }
 
 }
