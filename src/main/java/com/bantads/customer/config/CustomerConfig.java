@@ -1,32 +1,47 @@
 package com.bantads.customer.config;
 
-import org.springframework.amqp.core.*;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
-import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.Queue;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-
-@Configuration
+@Import(RabbitMqConfig.class)
 public class CustomerConfig {
 
+    static final String createQueueName = "customer.create";
+    static final String updateQueueName = "customer.update";
+    static final String deleteQueueName = "customer.delete";
+
     @Bean
-    DirectExchange exchange() {
-        return new DirectExchange("orchestrator-saga");
+    public Queue createQueueCreate() {
+        return new Queue(createQueueName, true);
     }
 
     @Bean
-    public MessageConverter converter(){
-        return new Jackson2JsonMessageConverter();
+    public Queue updateQueueUpdate() {
+        return new Queue(updateQueueName, true);
     }
 
     @Bean
-    public AmqpTemplate template(ConnectionFactory connectionFactory){
-        final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        rabbitTemplate.setMessageConverter(converter());
-        return rabbitTemplate;
+    public Queue deleteQueueDelete() {
+        return new Queue(deleteQueueName, true);
+    }
+
+    @Bean
+    Binding createBinding(Queue createAccountQueue, DirectExchange exchange) {
+        return BindingBuilder.bind(createAccountQueue).to(exchange).with(createQueueName);
+    }
+
+    @Bean
+    Binding updateBinding(Queue createAccountQueue, DirectExchange exchange) {
+        return BindingBuilder.bind(createAccountQueue).to(exchange).with(updateQueueName);
+    }
+
+    @Bean
+    Binding deleteBinding(Queue createAccountQueue, DirectExchange exchange) {
+        return BindingBuilder.bind(createAccountQueue).to(exchange).with(deleteQueueName);
     }
 
 }
