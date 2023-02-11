@@ -32,18 +32,18 @@ public class CustomerConfig {
     }
 
     @Bean
-    Binding createBinding(Queue createAccountQueue, DirectExchange exchange) {
-        return BindingBuilder.bind(createAccountQueue).to(exchange).with(createQueueName);
+    Binding createBinding(Queue createQueueCreate, DirectExchange exchange) {
+        return BindingBuilder.bind(createQueueCreate).to(exchange).with(createQueueName);
     }
 
     @Bean
-    Binding updateBinding(Queue createAccountQueue, DirectExchange exchange) {
-        return BindingBuilder.bind(createAccountQueue).to(exchange).with(updateQueueName);
+    Binding updateBinding(Queue updateQueueUpdate, DirectExchange exchange) {
+        return BindingBuilder.bind(updateQueueUpdate).to(exchange).with(updateQueueName);
     }
 
     @Bean
-    Binding deleteBinding(Queue createAccountQueue, DirectExchange exchange) {
-        return BindingBuilder.bind(createAccountQueue).to(exchange).with(deleteQueueName);
+    Binding deleteBinding(Queue deleteQueueDelete, DirectExchange exchange) {
+        return BindingBuilder.bind(deleteQueueDelete).to(exchange).with(deleteQueueName);
     }
 
 }
