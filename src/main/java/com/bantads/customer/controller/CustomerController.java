@@ -18,12 +18,11 @@ public class CustomerController {
     @GetMapping
     public ResponseEntity<List<CustomerModel>> getAllCustomer() {
         List<CustomerModel> customerModelList = this.customerRepository.findAll();
-        customerModelList.sort((a, b) -> a.getId().compareTo(b.getId()));
         return ResponseEntity.ok(customerModelList);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CustomerModel> getCustomerById(@PathVariable Long id) {
+    public ResponseEntity<CustomerModel> getCustomerById(@PathVariable String id) {
         CustomerModel customerModel = this.customerRepository.findById(id).orElseThrow();
         return ResponseEntity.ok(customerModel);
     }
@@ -35,7 +34,7 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CustomerModel> updateCustomer(@PathVariable Long id, @RequestBody CustomerModel customerModel) {
+    public ResponseEntity<CustomerModel> updateCustomer(@PathVariable String id, @RequestBody CustomerModel customerModel) {
         CustomerModel customer = this.customerRepository.findById(id).orElseThrow();
         customer.setName(customerModel.getName());
         customer.setCpf(customerModel.getCpf());
@@ -46,7 +45,7 @@ public class CustomerController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCustomer(@PathVariable Long id) {
+    public ResponseEntity<String> deleteCustomer(@PathVariable String id) {
         this.customerRepository.deleteById(id);
         return ResponseEntity.ok("Deleted");
     }

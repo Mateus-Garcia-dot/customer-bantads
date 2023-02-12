@@ -15,12 +15,12 @@ public class CustomerConsumer {
 
     @RabbitListener(queues = "customer.create")
     public void createCustomer(CustomerModel customerModel) {
-        CustomerModel customerCustomerModel = this.customerRepository.save(customerModel);
+        this.customerRepository.save(customerModel);
     }
 
     @RabbitListener(queues = "customer.update")
     public void updateCustomer(CustomerModel customerModel) {
-        CustomerModel customer = this.customerRepository.findById(customerModel.getId()).orElse(null);
+        CustomerModel customer = this.customerRepository.findById(customerModel.getUuid()).orElse(null);
         if (customer == null) {
             return;
         }
@@ -33,6 +33,6 @@ public class CustomerConsumer {
 
     @RabbitListener(queues = "customer.delete")
     public void deleteCustomer(CustomerModel customerModel) {
-        this.customerRepository.deleteById(customerModel.getId());
+        this.customerRepository.deleteById(customerModel.getUuid());
     }
 }
