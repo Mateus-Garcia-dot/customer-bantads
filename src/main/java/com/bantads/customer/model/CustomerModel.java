@@ -9,9 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 public class CustomerModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    private String uuid = java.util.UUID.randomUUID().toString();
     private String name;
     private String cpf;
     private Long address;
