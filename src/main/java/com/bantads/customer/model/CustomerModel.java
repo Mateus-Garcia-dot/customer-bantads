@@ -12,7 +12,7 @@ public class CustomerModel {
     private String uuid = java.util.UUID.randomUUID().toString();
     private String name;
     private String cpf;
-    private Long address;
+    private String address;
     private String phone;
     private Double salary;
 }
