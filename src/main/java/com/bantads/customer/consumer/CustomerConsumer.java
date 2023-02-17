@@ -43,8 +43,8 @@ public class CustomerConsumer {
     }
 
     @RabbitListener(queues = "customer.patch")
-    public void patchCustomer(String id, CustomerModel customerModel) {
-        CustomerModel customer = this.customerRepository.findById(id).orElse(null);
+    public void patchCustomer(CustomerModel customerModel) {
+        CustomerModel customer = this.customerRepository.findById(customerModel.getUuid()).orElse(null);
         if (customer == null) {
             return;
         }
