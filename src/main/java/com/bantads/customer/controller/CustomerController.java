@@ -3,6 +3,7 @@ package com.bantads.customer.controller;
 import com.bantads.customer.model.CustomerModel;
 import com.bantads.customer.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,5 +49,26 @@ public class CustomerController {
     public ResponseEntity<String> deleteCustomer(@PathVariable String id) {
         this.customerRepository.deleteById(id);
         return ResponseEntity.ok("Deleted");
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<CustomerModel>  patchCustomer(@PathVariable String id, @RequestBody CustomerModel customerModel) {
+        CustomerModel customer = this.customerRepository.findById(id).orElseThrow();
+        if (customerModel.getName() != null) {
+            customer.setName(customerModel.getName());
+        }
+        if (customerModel.getCpf() != null) {
+            customer.setCpf(customerModel.getCpf());
+        }
+        if (customerModel.getAddress() != null) {
+            customer.setAddress(customerModel.getAddress());
+        }
+        if (customerModel.getPhone() != null) {
+            customer.setPhone(customerModel.getPhone());
+        }
+        if (customerModel.getSalary() != null) {
+            customer.setSalary(customerModel.getSalary());
+        }
+        return ResponseEntity.ok(this.customerRepository.save(customer));
     }
 }
