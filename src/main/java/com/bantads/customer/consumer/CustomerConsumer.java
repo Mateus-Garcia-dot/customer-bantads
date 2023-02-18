@@ -5,15 +5,11 @@ import com.bantads.customer.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
-@Component
 @AllArgsConstructor
+@Component
 @Data
 public class CustomerConsumer {
 
