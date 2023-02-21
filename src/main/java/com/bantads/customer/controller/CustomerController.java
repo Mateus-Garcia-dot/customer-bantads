@@ -3,7 +3,6 @@ package com.bantads.customer.controller;
 import com.bantads.customer.model.CustomerModel;
 import com.bantads.customer.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +14,13 @@ import java.util.List;
 public class CustomerController {
 
     private final CustomerRepository customerRepository;
+
+
+   @GetMapping("/cpf/{cpf}")
+    public ResponseEntity<List<CustomerModel>> getCustomerByCpf(@PathVariable String cpf) {
+        List<CustomerModel> customerModelList = this.customerRepository.findByCpf(cpf);
+        return ResponseEntity.ok(customerModelList);
+    }
 
     @GetMapping
     public ResponseEntity<List<CustomerModel>> getAllCustomer() {
@@ -52,7 +58,7 @@ public class CustomerController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<CustomerModel>  patchCustomer(@PathVariable String id, @RequestBody CustomerModel customerModel) {
+    public ResponseEntity<CustomerModel> patchCustomer(@PathVariable String id, @RequestBody CustomerModel customerModel) {
         CustomerModel customer = this.customerRepository.findById(id).orElseThrow();
         if (customerModel.getName() != null) {
             customer.setName(customerModel.getName());
