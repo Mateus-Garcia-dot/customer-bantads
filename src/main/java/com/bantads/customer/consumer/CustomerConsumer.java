@@ -1,10 +1,12 @@
 package com.bantads.customer.consumer;
 
+import com.bantads.customer.config.ManagerConfig;
 import com.bantads.customer.model.CustomerModel;
 import com.bantads.customer.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
 
@@ -14,10 +16,12 @@ import org.springframework.stereotype.Component;
 public class CustomerConsumer {
 
     private CustomerRepository customerRepository;
+    private RabbitTemplate rabbitTemplate;
 
     @RabbitListener(queues = "customer.create")
     public void createCustomer(CustomerModel customerModel) {
         this.customerRepository.save(customerModel);
+        rabbitTemplate.convertAndSend(ManagerConfig.sortRequestQueueName, 1);
     }
 
     @RabbitListener(queues = "customer.update")

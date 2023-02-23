@@ -1,8 +1,10 @@
 package com.bantads.customer.controller;
 
+import com.bantads.customer.config.ManagerConfig;
 import com.bantads.customer.model.CustomerModel;
 import com.bantads.customer.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +16,7 @@ import java.util.List;
 public class CustomerController {
 
     private final CustomerRepository customerRepository;
+    private final RabbitTemplate rabbitTemplate;
 
 
    @GetMapping("/cpf/{cpf}")
@@ -37,6 +40,7 @@ public class CustomerController {
     @PostMapping
     public ResponseEntity<CustomerModel> createCustomer(@RequestBody CustomerModel customerModel) {
         CustomerModel customerCustomerModel = this.customerRepository.save(customerModel);
+        rabbitTemplate.convertAndSend(ManagerConfig.sortRequestQueueName, 1);
         return ResponseEntity.ok(customerCustomerModel);
     }
 
